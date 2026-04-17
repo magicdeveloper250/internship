@@ -1,5 +1,7 @@
 import { useState } from "react";
 import apiClient from "../api/apiClient";
+import Navbar from "./Navbar";
+
 export default function CreateModule() {
   const [formData, setFormData] = useState({
     moduleName: "",
@@ -13,7 +15,7 @@ export default function CreateModule() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // to disable default browser behaviour when form is submitted
     /*
     http response code:
      200 ok, 
@@ -39,26 +41,26 @@ export default function CreateModule() {
       
      */
 
-
     try {
       const response = await apiClient.post("/modules", formData);
+      // DRY: Don't Repeat Yourself
       console.log(response);
     } catch (e) {}
   };
 
   return (
-    <div className="flex flex-col justify-center items-center max-w-2xl max-h-screen overflow-y-auto">
-      <div className="flex flex-col gap-2">
-        <h1 className="font-extrabold text-2xl">Create new Module</h1>
-      </div>
-      <form  onSubmit={handleSubmit}>
+    <div className="h-screen flex flex-col justify-center items-center mx-4">
+        <h1 className="text-2xl text-blue-600 text-center">
+          Create New Module
+        </h1>
+      <form onSubmit={handleSubmit} className="min-w-3xl">
         <div className="flex flex-col gap-2">
           <label htmlFor="moduleName">Module Name</label>
           <input
             type="text"
             id="moduleName"
             name="moduleName"
-            className="border-2 border-gray "
+            className="border-2 border-gray rounded-lg p-1"
             onChange={handleChange}
           />
         </div>
@@ -68,7 +70,7 @@ export default function CreateModule() {
             type="text"
             name="moduleCode"
             id="moduleCode"
-            className="border-2 border-gray"
+            className="border-2 border-gray rounded-lg p-1"
             onChange={handleChange}
           />
         </div>
@@ -78,7 +80,7 @@ export default function CreateModule() {
             type="text"
             name="moduleDescription"
             id="moduleDescription"
-            className="border-2 border-gray auto-rows-auto"
+            className="border-2 rounded-lg border-gray auto-rows-auto p-2"
             onChange={handleChange}
           />
         </div>
@@ -88,7 +90,7 @@ export default function CreateModule() {
             type="text"
             name="moduleTrainer"
             id="moduleTrainer"
-            className="border-2 border-gray"
+            className="border-2 border-gray rounded-lg p-1"
             onChange={handleChange}
           />
         </div>
@@ -96,7 +98,7 @@ export default function CreateModule() {
         <div className="flex flex-col gap-2">
           <button
             type="submit"
-            className="w-full bg-blue-600 p-1 my-2 text-white"
+            className="w-full bg-blue-900 p-1 my-2 text-white rounded-full cursor-pointer"
           >
             Submit
           </button>

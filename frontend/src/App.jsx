@@ -1,15 +1,24 @@
- 
-import './App.css'
-import CreateModule from './components/CreateModule'
+import "./App.css";
+import CreateModule from "./components/CreateModule";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ListModules from "./components/ListModules";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import NotFound from "./components/notfound";
 
 function App() {
-
   return (
-     
-   <div>
-    <CreateModule/>
-   </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Navbar />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/new-module" element={<CreateModule />} />
+          <Route path="/list-modules" element={<ListModules />} />
+          <Route path="*" element={<NotFound/>}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

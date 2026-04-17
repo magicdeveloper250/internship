@@ -4,7 +4,7 @@ const dbPool= mysql.createPool({
     host: "localhost",
     database:"e_learning",
     user:"root",
-    password:"",
+    password:"root",
     port:3306
 })
 
