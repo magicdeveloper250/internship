@@ -22,8 +22,7 @@ app.get("/", async (req, res) => {
 // route for creating new module
 app.post("/modules", async (req, res) => {
   const data = req.body;
-  console.log(data);
-  const moduleName = data.moduleName;
+  const moduleName = data.moduleName; // .: member access operator
   const moduleCode = data.moduleCode;
   const moduleDescription = data.moduleDescription;
   const moduleTrainer = data.moduleTrainer;
@@ -52,20 +51,43 @@ app.get("/modules", async (req, res) => {
 
 app.get("/modules/:id", async (req, res) => {
   const moduleId = req.params.id;
-  const module = await dbPool.query("SELECT * FROM module WHERE id=?", [
+  const result = await dbPool.query("SELECT * FROM module WHERE id=?", [
     moduleId,
   ]);
   return res.json({
     success: true,
-    data: module,
+    data: result[0],
   });
 });
 
-app.put("/modules", async (req, res) => {
-  //  TODO extract module data from request and update specified module
+// Route for updating the single module Data
+app.put("/modules/:moduleId", async (req, res) => {
+  const moduleId = req.params.moduleId;
+  const data = req.body;
+  const moduleName = data["moduleName"]; //[]: computed member access operator
+  const moduleCode = data["moduleCode"];
+  const moduleDescription = data["moduleDescription"];
+  const moduleTrainer = data["moduleTrainer"];
+  const result = await dbPool.query(
+    "UPDATE module SET moduleName=?, moduleCode=?, moduleDescription=?, moduleTrainer=?;",
+    [moduleName, moduleCode, moduleDescription, moduleTrainer],
+  );
+  return res.json({
+    success: true,
+    message: "Module updated successfully! ✅",
+  }).status(201);
 });
-app.delete("/modules", async (req, res) => {
-  // TODO delete module from database
+
+// route for deleting single module from database.
+app.delete("/modules/:id", async (req, res) => {
+  const moduleId = req.params.id;
+  const result = await dbPool.query("DELETE FROM module WHERE id=?", [
+    moduleId,
+  ]);
+  return res.json({
+    success: true,
+    message: "Module deleted successfully",
+  }, ).status(204);
 });
 
 app.listen("5000", () => {

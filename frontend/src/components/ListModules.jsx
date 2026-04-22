@@ -1,24 +1,38 @@
 import { useState, useEffect } from "react";
 import apiClient from "../api/apiClient";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 export default function ListModules() {
   const [modules, setModules] = useState([]);
-
+  const navigate = useNavigate();
   const fetchModules = async () => {
     try {
       const resp = await apiClient.get("/modules");
       setModules(resp.data.data);
     } catch (e) {}
   };
+
+
+   const handleDelete = async (moduleId) => {
+    try {
+      const resp = await apiClient.delete(`/modules/${moduleId}`);
+       fetchModules();
+    } catch (error) {}
+  };
+
+  
   useEffect(() => {
     fetchModules();
   }, []);
+
+ 
 
   //   id, moduleName,moduleCode,moduleTrainer,moduleDescription,createAt,updateAt
 
   return (
     <div className="h-screen flex flex-col justify-center items-center mx-4">
-      <h1 className="text-2xl text-blue-900 font-bold text-center">List of Modules</h1>
+      <h1 className="text-2xl text-blue-900 font-bold text-center">
+        List of Modules
+      </h1>
       <table className="table p-2">
         <thead className="table-header-group border-2">
           <td className="px-3 font-bold">Id</td>
@@ -52,10 +66,16 @@ export default function ListModules() {
 
                 {/* Ation buttons td */}
                 <td className="flex p-2 justify-between gap-1">
-                  <Link to={`/edit-module/${module.id}`} className="bg-yellow-600 text-white p-2 rounded-sm cursor-pointer hover:opacity-80">
+                  <Link
+                    to={`/edit-module/${module.id}`}
+                    className="bg-yellow-600 text-white p-2 rounded-sm cursor-pointer hover:opacity-80"
+                  >
                     Edit
                   </Link>
-                  <button className="bg-red-600 text-white p-2 rounded-sm cursor-pointer hover:opacity-80">
+                  <button
+                    className="bg-red-600 text-white p-2 rounded-sm cursor-pointer hover:opacity-80"
+                    onClick={() => handleDelete(module.id)}
+                  >
                     Delete
                   </button>
                 </td>

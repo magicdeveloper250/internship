@@ -1,6 +1,7 @@
 import { useState } from "react";
 import apiClient from "../api/apiClient";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateModule() {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ export default function CreateModule() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault(); // to disable default browser behaviour when form is submitted
     /*
@@ -44,7 +46,7 @@ export default function CreateModule() {
     try {
       const response = await apiClient.post("/modules", formData);
       // DRY: Don't Repeat Yourself
-      console.log(response);
+       navigate("/list-modules");
     } catch (e) {}
   };
 
