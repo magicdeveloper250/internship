@@ -50,7 +50,7 @@ export default function CreateModule() {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center mx-4">
-        <h1 className="text-2xl text-blue-600 text-center">
+        <h1 className="text-2xl font-bold text-blue-900 text-center">
           Create New Module
         </h1>
       <form onSubmit={handleSubmit} className="min-w-3xl">

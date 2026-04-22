@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import dbPool from "./db.js";
 import cors from "cors";
 
@@ -19,6 +19,7 @@ app.get("/", async (req, res) => {
   });
 });
 
+// route for creating new module
 app.post("/modules", async (req, res) => {
   const data = req.body;
   console.log(data);
@@ -26,25 +27,19 @@ app.post("/modules", async (req, res) => {
   const moduleCode = data.moduleCode;
   const moduleDescription = data.moduleDescription;
   const moduleTrainer = data.moduleTrainer;
-  const createAt =  new Date();
+  const createAt = new Date();
   const result = await dbPool.query(
     `INSERT INTO module (moduleName,moduleCode, moduleDescription,moduleTrainer,createAt) 
      VALUES(?,?,?,?,?)`,
-    [
-    moduleName, 
-    moduleCode,
-    moduleDescription,
-    moduleTrainer,
-    createAt
-  ],
+    [moduleName, moduleCode, moduleDescription, moduleTrainer, createAt],
   );
-
   return res.json({
     success: true,
     message: "New module Inserted successfully",
   });
 });
 
+// route for getting all modules
 app.get("/modules", async (req, res) => {
   const [result] = await dbPool.query("SELECT * FROM module");
   return res.json({
@@ -52,6 +47,20 @@ app.get("/modules", async (req, res) => {
     data: result,
   });
 });
+
+// route for getting single module
+
+app.get("/modules/:id", async (req, res) => {
+  const moduleId = req.params.id;
+  const module = await dbPool.query("SELECT * FROM module WHERE id=?", [
+    moduleId,
+  ]);
+  return res.json({
+    success: true,
+    data: module,
+  });
+});
+
 app.put("/modules", async (req, res) => {
   //  TODO extract module data from request and update specified module
 });

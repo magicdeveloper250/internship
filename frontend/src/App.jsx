@@ -5,6 +5,7 @@ import ListModules from "./components/ListModules";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import NotFound from "./components/notfound";
+import EditModule from "./components/EditModule";
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/new-module" element={<CreateModule />} />
           <Route path="/list-modules" element={<ListModules />} />
-          <Route path="*" element={<NotFound/>}/>
+          <Route path="/edit-module/:id" element={<EditModule />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>
