@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ListModules from "./components/ListModules";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
-import NotFound from "./components/notfound";
+import NotFound from "./components/NotFound";
 import EditModule from "./components/EditModule";
 
 function App() {
