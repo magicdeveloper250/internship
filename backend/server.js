@@ -7,7 +7,7 @@ const { json } = pkg;
 
 app.use(
   cors({
-    origin: "https://internship1-v8ke.onrender.com",
+    origin: "*",
   }),
 );
 
