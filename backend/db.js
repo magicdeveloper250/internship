@@ -5,7 +5,8 @@ const dbPool= mysql.createPool({
     database:"isivgxsa_modules",
     user:"isivgxsa_module_user",
     password:"=Y]A@ALM7d&_%McB",
-    port:3306
+    port:3306,
+    connectionLimit:10
 })
 
 export default dbPool;
