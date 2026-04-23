@@ -1,10 +1,10 @@
 import mysql from "mysql2/promise"
 
 const dbPool= mysql.createPool({
-    host: "localhost",
-    database:"e_learning",
-    user:"root",
-    password:"root",
+    host: "198.251.89.126",
+    database:"isivgxsa_modules",
+    user:"isivgxsa_module_user",
+    password:"=Y]A@ALM7d&_%McB",
     port:3306
 })
 
