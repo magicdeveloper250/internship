@@ -1,8 +1,9 @@
-import express, { json } from "express";
+import pkg from "express";
 import dbPool from "./db.js";
 import cors from "cors";
 
-const app = express();
+const app = pkg();
+const { json } = pkg;
 
 app.use(
   cors({
@@ -10,7 +11,7 @@ app.use(
   }),
 );
 
-app.use(express.json());
+app.use(json());
 
 app.get("/", async (req, res) => {
   return res.json({
@@ -22,19 +23,19 @@ app.get("/", async (req, res) => {
 // route for creating new module
 app.post("/modules", async (req, res) => {
   const data = req.body;
-  const moduleName = data.moduleName; // .: member access operator
+  const moduleName = data.moduleName;
   const moduleCode = data.moduleCode;
   const moduleDescription = data.moduleDescription;
   const moduleTrainer = data.moduleTrainer;
   const createAt = new Date();
-  const result = await dbPool.query(
-    `INSERT INTO module (moduleName,moduleCode, moduleDescription,moduleTrainer,createAt) 
-     VALUES(?,?,?,?,?)`,
+  await dbPool.query(
+    `INSERT INTO module (moduleName, moduleCode, moduleDescription, moduleTrainer, createAt) 
+     VALUES (?, ?, ?, ?, ?)`,
     [moduleName, moduleCode, moduleDescription, moduleTrainer, createAt],
   );
-  return res.json({
+  return res.status(201).json({
     success: true,
-    message: "New module Inserted successfully",
+    message: "New module inserted successfully",
   });
 });
 
@@ -42,16 +43,15 @@ app.post("/modules", async (req, res) => {
 app.get("/modules", async (req, res) => {
   const [result] = await dbPool.query("SELECT * FROM module");
   return res.json({
-    success: false,
+    success: true,        // ✅ was `false` by mistake
     data: result,
   });
 });
 
 // route for getting single module
-
 app.get("/modules/:id", async (req, res) => {
   const moduleId = req.params.id;
-  const result = await dbPool.query("SELECT * FROM module WHERE id=?", [
+  const [result] = await dbPool.query("SELECT * FROM module WHERE id = ?", [
     moduleId,
   ]);
   return res.json({
@@ -60,36 +60,34 @@ app.get("/modules/:id", async (req, res) => {
   });
 });
 
-// Route for updating the single module Data
+// Route for updating a single module
 app.put("/modules/:moduleId", async (req, res) => {
   const moduleId = req.params.moduleId;
   const data = req.body;
-  const moduleName = data["moduleName"]; //[]: computed member access operator
+  const moduleName = data["moduleName"];
   const moduleCode = data["moduleCode"];
   const moduleDescription = data["moduleDescription"];
   const moduleTrainer = data["moduleTrainer"];
-  const result = await dbPool.query(
-    "UPDATE module SET moduleName=?, moduleCode=?, moduleDescription=?, moduleTrainer=?;",
-    [moduleName, moduleCode, moduleDescription, moduleTrainer],
+  await dbPool.query(
+    "UPDATE module SET moduleName=?, moduleCode=?, moduleDescription=?, moduleTrainer=? WHERE id=?",  // ✅ added WHERE clause
+    [moduleName, moduleCode, moduleDescription, moduleTrainer, moduleId],
   );
-  return res.json({
+  return res.status(201).json({
     success: true,
     message: "Module updated successfully! ✅",
-  }).status(201);
+  });
 });
 
-// route for deleting single module from database.
+// route for deleting a single module
 app.delete("/modules/:id", async (req, res) => {
   const moduleId = req.params.id;
-  const result = await dbPool.query("DELETE FROM module WHERE id=?", [
-    moduleId,
-  ]);
-  return res.json({
+  await dbPool.query("DELETE FROM module WHERE id = ?", [moduleId]);
+  return res.status(204).json({        // ✅ fixed chaining order
     success: true,
     message: "Module deleted successfully",
-  }, ).status(204);
+  });
 });
 
-app.listen("5000", () => {
-  console.log("✅Server started successfully at http://localhost:5000");
+app.listen(5000, () => {
+  console.log("✅ Server started successfully at http://localhost:5000");
 });
